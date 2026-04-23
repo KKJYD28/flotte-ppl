@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Flotte PPL - Demande de compte</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:linear-gradient(135deg,#8B1A1A 0%,#6B0F0F 50%,#1a0808 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.card{background:#fff;border-radius:16px;width:100%;max-width:520px;box-shadow:0 24px 60px rgba(0,0,0,.4);overflow:hidden}
+.header{background:linear-gradient(135deg,#8B1A1A,#C8A84B);padding:22px 28px;text-align:center;color:#fff}
+.logo{font-size:32px;margin-bottom:6px}
+.header h1{font-size:18px;font-weight:700;margin-top:4px}
+.header p{font-size:11px;opacity:.8;margin-top:3px}
+.body{padding:24px 28px;display:flex;flex-direction:column;gap:14px}
+.info{background:#EFF6FF;border:1px solid #BFDBFE;border-radius:8px;padding:10px 14px;font-size:11px;color:#1E40AF;line-height:1.5}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+label{display:block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#6B7280;margin-bottom:4px}
+input,textarea{width:100%;padding:9px 12px;border:1.5px solid #E5E7EB;border-radius:8px;font-size:12px;font-family:inherit;outline:none}
+input:focus,textarea:focus{border-color:#8B1A1A}
+textarea{resize:vertical;min-height:70px}
+.req{color:#DC2626}
+.btn{width:100%;padding:13px;background:linear-gradient(135deg,#8B1A1A,#C8A84B);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;margin-top:4px}
+.msg{display:none;padding:12px;border-radius:8px;font-size:12px;margin-top:4px;line-height:1.5}
+.ok{background:#F0FDF4;border:1px solid #86EFAC;color:#059669}
+.err{background:#FEF2F2;border:1px solid #FECACA;color:#DC2626}
+.success-screen{display:none;text-align:center;padding:30px 20px}
+.success-screen .icon{font-size:56px;margin-bottom:16px}
+.success-screen h2{color:#059669;font-size:18px;font-weight:700;margin-bottom:10px}
+.success-screen p{color:#6B7280;font-size:13px;line-height:1.7;margin-bottom:16px}
+.id-box{background:#F9F5EE;border:1px solid #C8A84B;border-radius:8px;padding:12px 16px;font-size:12px;text-align:left;margin-bottom:16px}
+.id-box b{color:#8B1A1A}
+.btn-retour{display:inline-block;padding:10px 24px;background:linear-gradient(135deg,#8B1A1A,#C8A84B);color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:700;font-size:13px}
+.footer{padding:14px 28px;border-top:1px solid #F3F4F6;text-align:center;font-size:10px;color:#9CA3AF}
+@media(max-width:480px){.row2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="header">
+    <div class="logo">&#x1F697;</div>
+    <h1>Flotte PPL</h1>
+    <p>Demande de creation de compte</p>
+  </div>
+
+  <!-- Formulaire -->
+  <div class="body" id="form-body">
+    <div class="info">
+      Remplissez ce formulaire pour demander un acces au logiciel.
+      Votre demande sera validee par l'administrateur avant activation.
+    </div>
+    <div class="row2">
+      <div><label>Nom <span class="req">*</span></label><input id="f-nom" type="text" placeholder="Votre nom"></div>
+      <div><label>Prenom</label><input id="f-prenom" type="text" placeholder="Votre prenom"></div>
+    </div>
+    <div class="row2">
+      <div><label>Service / Departement <span class="req">*</span></label><input id="f-service" type="text" placeholder="ex: RH, Finance..."></div>
+      <div><label>Poste occupe</label><input id="f-poste" type="text" placeholder="ex: Assistant RH"></div>
+    </div>
+    <div><label>Email professionnel <span class="req">*</span></label><input id="f-email" type="email" placeholder="nom@prestigepoultry.com"></div>
+    <div class="row2">
+      <div><label>Identifiant souhaite <span class="req">*</span></label><input id="f-username" type="text" placeholder="ex: jdupont"></div>
+      <div><label>Mot de passe <span class="req">*</span> (min 6 car.)</label><input id="f-password" type="password" placeholder="Min 6 caracteres"></div>
+    </div>
+    <div><label>Pourquoi avez-vous besoin d'un acces ?</label><textarea id="f-motif" placeholder="Decrivez votre besoin..."></textarea></div>
+    <div id="msg" class="msg"></div>
+    <button class="btn" id="submit-btn" type="button" onclick="soumettre()">Soumettre ma demande</button>
+  </div>
+
+  <!-- Ecran de succes -->
+  <div class="success-screen" id="success-screen">
+    <div class="icon">&#x2705;</div>
+    <h2>Demande envoyee !</h2>
+    <p>Votre demande a bien ete enregistree.<br>L'administrateur la validera sous peu.<br>
+      Une fois approuve, connectez-vous sur :<br>
+      <strong id="logiciel-url" style="color:#8B1A1A;font-size:12px"></strong></p>
+    <div class="id-box">
+      <b>Conservez vos identifiants :</b><br>
+      Login : <b id="show-user"></b><br>
+      Mot de passe : celui que vous avez choisi
+    </div>
+    <button class="btn-retour" type="button" onclick="fermer()">Fermer cette page</button>
+  </div>
+
+  <div class="footer">Flotte PPL v27 &mdash; Prestige Poultry Limited, Yamoussoukro</div>
+</div>
+
+<script>
+function showMsg(txt, type) {
+  var m = document.getElementById('msg');
+  if (!m) return;
+  m.style.display = 'block';
+  m.className = 'msg ' + type;
+  m.innerHTML = txt;
+}
+
+function soumettre() {
+  var nom      = (document.getElementById('f-nom').value || '').trim();
+  var prenom   = (document.getElementById('f-prenom').value || '').trim();
+  var service  = (document.getElementById('f-service').value || '').trim();
+  var poste    = (document.getElementById('f-poste').value || '').trim();
+  var email    = (document.getElementById('f-email').value || '').trim();
+  var username = (document.getElementById('f-username').value || '').trim().toLowerCase().replace(/[^a-z0-9._-]/g, '');
+  var password = (document.getElementById('f-password').value || '');
+  var motif    = (document.getElementById('f-motif').value || '').trim();
+
+  // Validations
+  if (!nom)    { showMsg('Le nom est obligatoire.', 'err'); return; }
+  if (!service){ showMsg('Le service est obligatoire.', 'err'); return; }
+  if (!email || email.indexOf('@') < 0) { showMsg('Email invalide.', 'err'); return; }
+  if (!username || username.length < 3) { showMsg('Identifiant trop court (min 3 car.).', 'err'); return; }
+  if (!password || password.length < 6) { showMsg('Mot de passe trop court (min 6 car.).', 'err'); return; }
+
+  var btn = document.getElementById('submit-btn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Envoi en cours...'; }
+  document.getElementById('msg').style.display = 'none';
+
+  function afficherSucces(){
+    document.getElementById('form-body').style.display = 'none';
+    document.getElementById('show-user').textContent = username;
+    var urlEl = document.getElementById('logiciel-url');
+    if(urlEl){
+      var base = window.location.protocol+'//'+window.location.host;
+      urlEl.textContent = base + '/';
+    }
+    document.getElementById('success-screen').style.display = 'block';
+  }
+
+  // Envoyer au serveur (partagé avec toutes les machines du réseau)
+  fetch('/api/inscription', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({nom:nom, prenom:prenom, service:service, poste:poste,
+      email:email, username:username, password:password, motif:motif})
+  }).then(function(r){ return r.json(); }).then(function(data){
+    if(data.ok){
+      afficherSucces();
+    } else {
+      showMsg(data.error || 'Erreur serveur', 'err');
+      if(btn){ btn.disabled=false; btn.textContent='Soumettre ma demande'; }
+    }
+  }).catch(function(){
+    // Fallback localStorage si pas de serveur
+    try{
+      var pending=[];
+      try{ pending=JSON.parse(localStorage.getItem('p5_inscriptions_pending')||'[]'); }catch(e2){}
+      pending.push({id:Date.now(), nom:nom, prenom:prenom, service:service, poste:poste,
+        email:email, username:username, password:password, motif:motif,
+        role:'demandeur', status:'pending', createdAt:new Date().toISOString()});
+      localStorage.setItem('p5_inscriptions_pending', JSON.stringify(pending));
+      afficherSucces();
+    }catch(e){
+      showMsg('Erreur: '+e.message, 'err');
+      if(btn){ btn.disabled=false; btn.textContent='Soumettre ma demande'; }
+    }
+  });
+}
+</script>
+</body>
+</html>

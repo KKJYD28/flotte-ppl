@@ -1,0 +1,20 @@
+{
+  "_meta": {
+    "created": "2026-04-19T00:00:00.000Z",
+    "version": "27.0",
+    "description": "FlottePPL — Prestige Poultry Limited"
+  },
+  "p5_accounts": [],
+  "p5_inscriptions_pending": [],
+  "p5_demandes_course": [],
+  "p5_approbateurs_course": [],
+  "p5_course_config": {},
+  "p5_vehicles": [],
+  "p5_drivers": [],
+  "p5_trips": [],
+  "p5_missions": [],
+  "p5_maint": [],
+  "p5_fuel": [],
+  "p5_docs": [],
+  "p5_logs": []
+}
